@@ -3,7 +3,7 @@
 /*    Module:       main.cpp                                                  */
 /*    Author:       georgekirkman                                             */
 /*    Created:      5/8/2024, 9:18:56 PM                                      */
-/*    Description:  V5 project                                                */
+/*    Description:  V5 Motor testing code                                              */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -46,24 +46,26 @@ void motorDisplay(int offset){
   float vM=0.0;
   float speed=0.0;
   float current=0.0;
-  vM=RM.voltage(voltageUnits::mV);
+  vM=RM.voltage(voltageUnits::volt);
   speed=RM.velocity(rpm);
   current=RM.current(amp);
-  Brain.Screen.printAt(1,offset,"mVolts %0.1f  Speed %0.1f rpm, Current  %0.2f  Amps");
+  Brain.Screen.printAt(1,offset,"Volts %0.1f , %0.1f rpm,  %0.2f  Amps", vM, speed, current);
 }
 
 void runMotorTest(){
   int offset=0;
   float speed=0;
+  Brain.Screen.clearScreen();
   // User control code here, inside the loop
-  while (1) {
+  while (speed<100) {
     speed=speed+20;
     offset=offset+20;
-    if (speed>100) break;
     voltDrive(speed, 0);
-    wait(2000,msec);
+    wait(3000,msec);
     motorDisplay(offset);
   }
+  voltDrive(0,0);
+  Brain.Screen.printAt(1,180,"Done  push X on the remote to re run Test");
 }
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -110,6 +112,7 @@ void autonomous(void) {
 void usercontrol(void) {
 Brain.Screen.clearScreen();
 Controller1.ButtonX.pressed(runMotorTest);
+Brain.Screen.printAt(1,20,"Ready push X on the remote to start Test");
   // User control code here, inside the loop
   while (1) {
    wait(20,msec);
