@@ -1,11 +1,18 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       georgekirkman                                             */
-/*    Created:      5/8/2024, 9:18:56 PM                                      */
-/*    Description:  V5 project                                                */
+/*    Author:       VEX                                                       */
+/*    Created:      Thu Sep 26 2019                                           */
+/*    Description:  Competition Template                                      */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
+
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// RM                   motor         6               
+// ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
 
@@ -14,12 +21,19 @@ using namespace vex;
 // A global instance of competition
 competition Competition;
 
-
 // define your global instances of motors and other devices here
-brain  Brain;
-controller Controller1 = controller(primary);
-motor RM = motor(PORT6, ratio18_1, true);
 
+// A global instance of brain used for printing to the V5 Brain screen
+brain  Brain;
+
+// VEXcode device constructors
+controller Controller1 = controller(primary);
+motor RM = motor(PORT6, ratio18_1, false);
+
+
+void vexcodeInit( void ) {
+  // nothing to initialize
+}
 // Custom functions
 
 void voltDrive(double speed, int wt){
@@ -35,20 +49,21 @@ void motorDisplay(int offset){
   vM=RM.voltage(voltageUnits::mV);
   speed=RM.velocity(rpm);
   current=RM.current(amp);
-  Brain.Screen.printAt(1,offset,"V %0.1f  mV,  %0.1f rpm,  %0.2f  Amps");
+  Brain.Screen.printAt(1,offset,"V %0.1f  mV,  %0.1f rpm,  %0.2f  Amps",vM,speed,current);
 }
 
 void runMotorTest(){
    Brain.Screen.printAt(1,20,"start");
   int offset=20;
-  float speed=0;
-  // User control code here, inside the loop
+  float speed=20;
+ 
   while (speed<=100) {
-    speed=speed+20;
+    
     offset=offset+20;
     voltDrive(speed, 0);
     wait(2000,msec);
     motorDisplay(offset);
+    speed=speed+20;
   }
     voltDrive(0, 0);
   Brain.Screen.printAt(1,160,"done");
@@ -64,6 +79,8 @@ void runMotorTest(){
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
+  // Initializing Robot Configuration. DO NOT REMOVE!
+  vexcodeInit();
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
@@ -96,7 +113,8 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-  Controller1.ButtonX.pressed(runMotorTest);
+  // User control code here, inside the loop
+ Controller1.ButtonX.pressed(runMotorTest);
 Brain.Screen.clearScreen();
 RM.spin(fwd,100,pct);
 wait(1000,msec);

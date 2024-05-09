@@ -18,8 +18,22 @@ competition Competition;
 // define your global instances of motors and other devices here
 brain  Brain;
 controller Controller1 = controller(primary);
-motor RM = motor(PORT2, ratio18_1, true);
+motor RM = motor(PORT6, ratio18_1, true);
 
+
+
+// VEXcode generated functions
+// define variable for remote controller enable/disable
+bool RemoteControlCodeEnabled = true;
+
+/**
+ * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
+ * 
+ * This should be called at the start of your int main function.
+ */
+void vexcodeInit( void ) {
+  // nothing to initialize
+}
 // Custom functions
 
 void voltDrive(double speed, int wt){
@@ -62,7 +76,7 @@ void runMotorTest(){
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
-
+vexcodeInit( );
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
