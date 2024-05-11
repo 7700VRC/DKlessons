@@ -49,7 +49,7 @@ void motorDisplay(int offset){
   vM=RM.voltage(voltageUnits::volt);
   speed=RM.velocity(rpm);
   current=RM.current(amp);
-  Brain.Screen.printAt(1,offset,"Volts %0.1f , %0.1f rpm,  %0.2f  Amps", vM, speed, current);
+  Brain.Screen.printAt(1,offset," %0.1f V, %0.1f rpm,  %0.2f  Amps", vM, speed, current);
 }
 
 void runMotorTest(){

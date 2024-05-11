@@ -53,7 +53,7 @@ void motorDisplay(int offset){
 }
 
 void runMotorTest(){
-   Brain.Screen.printAt(1,20,"start");
+   Brain.Screen.printAt(1,20,"start 2");
   int offset=20;
   float speed=20;
  

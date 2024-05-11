@@ -32,18 +32,18 @@ void motorDisplay(int offset){
   float vM=0.0;
   float speed=0.0;
   float current=0.0;
-  vM=RM.voltage(voltageUnits::mV);
+  vM=RM.voltage(voltageUnits::volt);
   speed=RM.velocity(rpm);
   current=RM.current(amp);
-  Brain.Screen.printAt(1,offset,"V %0.1f  mV,  %0.1f rpm,  %0.2f  Amps");
+  Brain.Screen.printAt(1,offset," %0.1f  V,  %0.1f rpm,  %0.2f  Amps");
 }
 
 void runMotorTest(){
-   Brain.Screen.printAt(1,20,"start");
+   
   int offset=20;
   float speed=0;
   // User control code here, inside the loop
-  while (speed<=100) {
+  while (speed<100) {
     speed=speed+20;
     offset=offset+20;
     voltDrive(speed, 0);
@@ -51,7 +51,7 @@ void runMotorTest(){
     motorDisplay(offset);
   }
     voltDrive(0, 0);
-  Brain.Screen.printAt(1,160,"done");
+  Brain.Screen.printAt(1,180,"done Press X to rerun the test");
 }
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -98,6 +98,7 @@ void autonomous(void) {
 void usercontrol(void) {
   Controller1.ButtonX.pressed(runMotorTest);
 Brain.Screen.clearScreen();
+Brain.Screen.printAt(1,20,"Press X to start the test today");
 RM.spin(fwd,100,pct);
 wait(1000,msec);
 RM.spin(fwd,0,pct);
