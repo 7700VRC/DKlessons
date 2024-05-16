@@ -3,7 +3,7 @@
 /*    Module:       main.cpp                                                  */
 /*    Author:       VEX                                                       */
 /*    Created:      Thu Sep 26 2019                                           */
-/*    Description:  Competition Template                                      */
+/*    Description:  Motor Testing Stall Test                                  */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -115,6 +115,7 @@ void autonomous(void) {
 void usercontrol(void) {
   // User control code here, inside the loop
  Controller1.ButtonX.pressed(runMotorTest);
+ Controller1.ButtonY.pressed(stallMotorTest);
 Brain.Screen.clearScreen();
 RM.spin(fwd,100,pct);
 wait(1000,msec);

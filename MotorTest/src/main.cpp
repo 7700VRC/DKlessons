@@ -3,8 +3,9 @@
 /*    Module:       main.cpp                                                  */
 /*    Author:       georgekirkman                                             */
 /*    Created:      5/8/2024, 9:18:56 PM                                      */
-/*    Description:  V5 Motor testing code                                              */
-/*                                                                            */
+/*    Description:  V5 Motor testing code                                     */
+/*   two options, free speed testing and stall testing                        */
+/*   for stall testing motor should be locked with titanium lock bar          */
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"
@@ -52,6 +53,17 @@ void motorDisplay(int offset){
   Brain.Screen.printAt(1,offset," %0.1f V, %0.1f rpm,  %0.2f  Amps", vM, speed, current);
 }
 
+void tempDisplay(int offset){
+  int temp=RM.temperature();
+  if (temp>=55) Brain.Screen.setFillColor(red);
+  else if (temp>=45) Brain.Screen.setFillColor(yellow);
+  else Brain.Screen.setFillColor(green);
+Brain.Screen.drawRectangle(1,offset-20,25,25);
+  Brain.Screen.setFillColor(transparent);
+Brain.Screen.printAt(30,offset,"  %d degrees C ", temp);
+
+}
+
 void runMotorTest(){
   int offset=0;
   float speed=0;
@@ -65,8 +77,30 @@ void runMotorTest(){
     motorDisplay(offset);
   }
   voltDrive(0,0);
-  Brain.Screen.printAt(1,180,"Done  push X on the remote to re run Test");
+   tempDisplay(offset+25);
+  Brain.Screen.printAt(1,180,"Done  push X on the remote to run Test");
+  Brain.Screen.printAt(1,220,"Done  push Y on the remote to run stall Test");
 }
+
+void stallMotorTest(){
+  int offset=0;
+  float speed=0;
+  Brain.Screen.clearScreen();
+  // User control code here, inside the loop
+  while (speed<100) {
+    speed=speed+20;
+    offset=offset+20;
+    voltDrive(speed, 0);
+    wait(500,msec);
+    motorDisplay(offset);
+  }
+  voltDrive(0,0);
+  tempDisplay(offset+25);
+  Brain.Screen.printAt(1,180,"Done  push X on the remote to run Test");
+  Brain.Screen.printAt(1,220,"Done  push Y on the remote to run stall Test");
+}
+
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -112,7 +146,9 @@ void autonomous(void) {
 void usercontrol(void) {
 Brain.Screen.clearScreen();
 Controller1.ButtonX.pressed(runMotorTest);
+Controller1.ButtonY.pressed(stallMotorTest);
 Brain.Screen.printAt(1,20,"Ready push X on the remote to start Test");
+Brain.Screen.printAt(1,60,"  push Y on the remote to run stall Test");
   // User control code here, inside the loop
   while (1) {
    wait(20,msec);
