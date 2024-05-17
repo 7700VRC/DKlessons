@@ -43,20 +43,20 @@ void voltDrive(double speed, int wt){
   wait(wt, msec);
 }
 
-void motorDisplay(int offset){
+void motorDisplay(int offset, double setSpeed){
   float vM=0.0;
   float speed=0.0;
-  float current=0.0;
+  float current=0.0;setSpeed=setSpeed*120/1000;
   vM=RM.voltage(voltageUnits::volt);
   speed=RM.velocity(rpm);
   current=RM.current(amp);
-  Brain.Screen.printAt(1,offset," %0.1f V, %0.1f rpm,  %0.2f  Amps", vM, speed, current);
+  Brain.Screen.printAt(1,offset," %0.1f V set, %0.1f V, %0.1f rpm,  %0.2f  Amps",setSpeed ,vM, speed, current);
 }
 
 void tempDisplay(int offset){
   int temp=RM.temperature();
-  if (temp>=55) Brain.Screen.setFillColor(red);
-  else if (temp>=45) Brain.Screen.setFillColor(yellow);
+  if (temp>=60) Brain.Screen.setFillColor(red);
+  else if (temp>=50) Brain.Screen.setFillColor(yellow);
   else Brain.Screen.setFillColor(green);
 Brain.Screen.drawRectangle(1,offset-20,25,25);
   Brain.Screen.setFillColor(transparent);
@@ -74,7 +74,7 @@ void runMotorTest(){
     offset=offset+20;
     voltDrive(speed, 0);
     wait(3000,msec);
-    motorDisplay(offset);
+    motorDisplay(offset,speed);
   }
   voltDrive(0,0);
    tempDisplay(offset+25);
@@ -92,7 +92,7 @@ void stallMotorTest(){
     offset=offset+20;
     voltDrive(speed, 0);
     wait(500,msec);
-    motorDisplay(offset);
+    motorDisplay(offset,speed);
   }
   voltDrive(0,0);
   tempDisplay(offset+25);
