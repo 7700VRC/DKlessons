@@ -18,14 +18,12 @@ competition Competition;
 
 // define your global instances of motors and other devices here
 brain  Brain;
-controller Controller1 = controller(primary);
-motor RM = motor(PORT6, ratio18_1, true);
+
+motor RM = motor(PORT1, ratio18_1, true);
 
 
 
 // VEXcode generated functions
-// define variable for remote controller enable/disable
-bool RemoteControlCodeEnabled = true;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
@@ -60,6 +58,7 @@ void tempDisplay(int offset){
   else Brain.Screen.setFillColor(green);
 Brain.Screen.drawRectangle(1,offset-20,25,25);
   Brain.Screen.setFillColor(transparent);
+  Brain.Screen.setPenColor(white);
 Brain.Screen.printAt(30,offset,"  %d degrees C ", temp);
 
 }
@@ -78,8 +77,7 @@ void runMotorTest(){
   }
   voltDrive(0,0);
    tempDisplay(offset+25);
-  Brain.Screen.printAt(1,180,"Done  push X on the remote to run Test");
-  Brain.Screen.printAt(1,220,"Done  push Y on the remote to run stall Test");
+  
 }
 
 void stallMotorTest(){
@@ -96,10 +94,82 @@ void stallMotorTest(){
   }
   voltDrive(0,0);
   tempDisplay(offset+25);
-  Brain.Screen.printAt(1,180,"Done  push X on the remote to run Test");
-  Brain.Screen.printAt(1,220,"Done  push Y on the remote to run stall Test");
+  
 }
 
+// Touch screen menu functions
+void drawButtons(){
+  // Button 1: Free Speed Test
+  Brain.Screen.setFillColor(color::green);
+  Brain.Screen.drawRectangle(20, 150, 220, 80);
+  Brain.Screen.setPenColor(color::black);
+  Brain.Screen.printAt(40, 170, "Free Speed Test");
+  
+  
+  // Button 2: Stall Test
+  Brain.Screen.setFillColor(color::red);
+  Brain.Screen.drawRectangle(260, 150, 220, 80);
+  Brain.Screen.setPenColor(color::white);
+  Brain.Screen.printAt(290, 170, "Stall Test");
+        Brain.Screen.printAt(290, 190, "Lock motor");
+        Brain.Screen.printAt(290, 210, "before testing");
+
+  Brain.Screen.setFillColor(transparent);
+  Brain.Screen.setPenColor(color::white);
+}
+
+void showMainMenu(){
+  Brain.Screen.clearScreen(color::blue);
+  Brain.Screen.setFillColor(color::blue);
+  Brain.Screen.setPenColor(color::white);
+  Brain.Screen.setFont(mono40);
+  
+  // Title
+ 
+  Brain.Screen.setFont(mono20);
+  Brain.Screen.printAt(50, 70, "Connect Motor in Port 1");
+  Brain.Screen.printAt(50, 90, "Select Test Type");
+  
+  drawButtons();
+}
+
+
+
+void handleTouchSelection(){
+  
+    
+  int x = Brain.Screen.xPosition();
+  int y = Brain.Screen.yPosition();
+      
+      // Check if touch is in Free Speed Test button area
+      if(x >= 20 && x <= 240 && y >= 110 && y <= 230){
+        // Highlight selected button
+        Brain.Screen.setFillColor(color::green);
+        Brain.Screen.drawRectangle(20, 110, 220, 80);
+        Brain.Screen.setPenColor(color::black);
+        Brain.Screen.printAt(40, 155, "Free Speed Test");
+       // Brain.Screen.printAt(40, 180, "Test");
+        wait(200, msec);
+        
+        // Run the test
+        runMotorTest();
+      }
+      // Check if touch is in Stall Test button area
+      else if(x >= 260 && x <= 480 && y >= 110 && y <= 230){
+        // Highlight selected button
+        Brain.Screen.setFillColor(color::red);
+        Brain.Screen.setPenColor(color::white);
+        Brain.Screen.drawRectangle(260, 110, 220, 80);
+        Brain.Screen.printAt(290, 155, "Stall Test");
+        Brain.Screen.printAt(290, 180, "Lock motor before test");
+        wait(200, msec);
+        
+        // Run the test
+        stallMotorTest();
+      }
+  drawButtons();
+  //showMainMenu();
+}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -115,6 +185,14 @@ void pre_auton(void) {
 vexcodeInit( );
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
+
+
+Brain.Screen.pressed(handleTouchSelection);
+
+Brain.Screen.clearScreen();
+
+showMainMenu();
+
 }
 
 /*---------------------------------------------------------------------------*/
@@ -144,11 +222,9 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-Brain.Screen.clearScreen();
-Controller1.ButtonX.pressed(runMotorTest);
-Controller1.ButtonY.pressed(stallMotorTest);
-Brain.Screen.printAt(1,20,"Ready push X on the remote to start Test");
-Brain.Screen.printAt(1,60,"  push Y on the remote to run stall Test");
+
+ Brain.Screen.printAt(290, 180, "Test User Control"); 
+ 
   // User control code here, inside the loop
   while (1) {
    wait(20,msec);

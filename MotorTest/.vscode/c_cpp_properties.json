@@ -6,11 +6,12 @@
 		"vex_sdkIncludes": [
 			"${vex_sdkPath}/clang/8.0.0/include/**",
 			"${vex_gcc}/**",
-			"${vex_gcc}/arm-none-eabi/armv7-arm/thumb",
+			"${vex_gcc}/arm-none-eabi/thumb",
 			"${vex_sdkPath}/gcc/include",
 			"${vex_sdkPath}/include/**",
 			"${workspaceFolder}/include/**",
-			"${workspaceFolder}/src/**"
+			"${workspaceFolder}/src/**",
+			"${vex_gcc}/arm-none-eabi/armv7-arm/thumb"
 		]
 	},
 	"configurations": [
