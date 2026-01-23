@@ -27,9 +27,9 @@
 		},
 		{
 			"name": "Mac",
-			"includePath": [
-				"${vex_sdkIncludes}"
-			],
+		//	"includePath": [
+		//		"${vex_sdkIncludes}"
+		//	],
 			"compilerPath": "${vex_compilerPath}",
 			"cStandard": "gnu99",
 			"cppStandard": "gnu++11",
