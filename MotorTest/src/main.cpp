@@ -5,7 +5,7 @@
 /*    Created:      5/8/2024, 9:18:56 PM                                      */
 /*    Description:  V5 Motor testing code                                     */
 /*   two options, free speed testing and stall testing                        */
-/*   for stall testing motor should be locked with titanium lock bar          */
+/*   for stall testing motor should be locked with titanium lock bar   d        */
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"
@@ -18,7 +18,6 @@ competition Competition;
 
 // define your global instances of motors and other devices here
 brain  Brain;
-
 motor RM = motor(PORT1, ratio18_1, true);
 
 
