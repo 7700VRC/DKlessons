@@ -168,6 +168,9 @@ void usercontrol(void)
 
     int ls = Controller1.Axis3.position(pct);
     int rs = Controller1.Axis2.position(pct);
+    int ss = Controller1.Axis1.position(pct);
+
+
 
     drive(ls, rs, 10);
     Display();
