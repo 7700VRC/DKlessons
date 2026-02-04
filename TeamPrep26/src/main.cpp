@@ -15,12 +15,12 @@ using namespace vex;
 competition Competition;
 
 // define your global instances of motors and other devices here
-brain Brain;
+brain Brain=brain();
 controller Controller1;
 
-motor RF = motor(PORT20, ratio18_1, false);
+motor RF = motor(PORT11, ratio18_1, true);
 
-motor LF = motor(PORT11, ratio18_1, true);
+motor LF = motor(PORT19, ratio18_1, false );
 
 // custom functions
 
@@ -117,7 +117,11 @@ void Display()
 
 void pre_auton(void)
 {
-
+int count =0;
+while(1){
+   Brain.Screen.printAt(5,100,"driver %d", count);
+     count++;
+}
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
@@ -152,6 +156,8 @@ void autonomous(void)
 void usercontrol(void)
 {
   // User control code here, inside the loop
+  int count = 0;
+  Brain.Screen.printAt(5,100,"driver %d", count);
   while (true)
   {
 
@@ -160,6 +166,8 @@ void usercontrol(void)
 
     drive(ls, rs, 10);
     Display();
+     Brain.Screen.printAt(5,100,"driver %d", count);
+     count++;
   }
 }
 
@@ -171,7 +179,8 @@ int main()
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
-
+  int count = 0;
+  Brain.Screen.printAt(5,100,"driver %d", count);
   // Run the pre-autonomous function.
   pre_auton();
  
