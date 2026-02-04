@@ -2,9 +2,9 @@
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
 /*    Author:       georgekirkman                                             */
-/*    Created:      1/23/2026, 4:58:45 PM                                     */
+/*    Created:      2/3/2026, 5:25:26 PM                                      */
 /*    Description:  V5 project                                                */
-/*    Updated: 1/26/2026. to include motor display                            */
+/*                                                                            */
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"
@@ -13,6 +13,9 @@ using namespace vex;
 
 // A global instance of competition
 competition Competition;
+
+// define your global instances of motors and other devices here
+
 
 // define your global instances of motors and other devices here
 brain Brain;
@@ -29,6 +32,7 @@ void drive(int lspeed, int rspeed, int wt)
   LF.spin(fwd, lspeed, percent);
   RF.spin(fwd, rspeed, percent);
   wait(wt, msec);
+  Brain.Screen.printAt(1,50,"dogs barking in driver");
 }
 
 void driveVolts(int lspeed, int rspeed, int wt)
@@ -40,6 +44,7 @@ void driveVolts(int lspeed, int rspeed, int wt)
   RF.spin(fwd, rspeed, voltageUnits::mV);
 
   wait(wt, msec);
+  Brain.Screen.printAt(1,250,"dogs barking drive volts");
 }
 
 // Health of the robot functions
@@ -81,7 +86,7 @@ void Display()
 
   double rightFrontCurr = RF.current(amp);
   double rightFrontTemp = RF.temperature(celsius);
-
+Brain.Screen.printAt(1,150,"dogs barking in display");
   LineNumber++;
   if (LF.installed())
   {
@@ -157,8 +162,7 @@ void autonomous(void)
 void usercontrol(void)
 {
   // User control code here, inside the loop
-  int count = 0;
-  Brain.Screen.printAt(5,100,"driver %d", count);
+ 
   while (true)
   {
 
@@ -167,8 +171,8 @@ void usercontrol(void)
 
     drive(ls, rs, 10);
     Display();
-     Brain.Screen.printAt(5,100,"driver %d", count);
-     count++;
+     
+    
   }
 }
 
