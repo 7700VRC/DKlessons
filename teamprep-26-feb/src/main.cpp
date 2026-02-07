@@ -86,7 +86,7 @@ void Display()
 
   double rightFrontCurr = RF.current(amp);
   double rightFrontTemp = RF.temperature(celsius);
-Brain.Screen.printAt(1,150,"dogs barking in display");
+
   LineNumber++;
   if (LF.installed())
   {
@@ -122,14 +122,7 @@ Brain.Screen.printAt(1,150,"dogs barking in display");
 
 void pre_auton(void)
 {
-int count =0;
-Brain.Screen.printAt(1,50,"dogs barking");
-while(1){
-   Brain.Screen.printAt(5,100,"driver %d", count);
-     count++;
-}
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
+// Example: clearing encoders, setting servo positions, ...
 }
 
 /*---------------------------------------------------------------------------*/
@@ -168,10 +161,7 @@ void usercontrol(void)
 
     int ls = Controller1.Axis3.position(pct);
     int rs = Controller1.Axis2.position(pct);
-    int ss = Controller1.Axis1.position(pct);
-
-
-
+   
     drive(ls, rs, 10);
     Display();
      
@@ -184,12 +174,11 @@ void usercontrol(void)
 //
 int main()
 {
-  Brain.Screen.printAt(1,50,"dogs barking");
+  
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
-  int count = 0;
-  Brain.Screen.printAt(5,100,"driver %d", count);
+   
   // Run the pre-autonomous function.
   pre_auton();
  
