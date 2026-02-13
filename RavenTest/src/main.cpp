@@ -8,7 +8,8 @@
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"
-
+#include <iostream> 
+#include <vector>
 using namespace vex;
 
 // A global instance of competition
@@ -17,6 +18,7 @@ competition Competition;
 // define your global instances of motors and other devices here
 
 controller Controller1;
+brain Brain;
 
 motor RF=motor(PORT20,ratio6_1,false);
 motor RM=motor(PORT19,ratio6_1,false);
@@ -28,6 +30,16 @@ motor Conv=motor(PORT1,ratio6_1,false);
 motor TR=motor(PORT10,ratio6_1,false);
 
 inertial gyro=inertial(PORT8);
+aivision AV_Camera = aivision(PORT4, aivision::ALL_AIOBJS);
+
+std::vector<int> typeVector;
+std::vector<float> xVector;
+std::vector<float> yVector;
+//const int mobileGoal = 1;
+enum gameElements {
+  blueBlock,
+  redBlock,
+};
 
 // custom functions
 
@@ -51,6 +63,82 @@ RF.stop(brake);
 RM.stop(brake);
 RB.stop(brake);  
 
+}
+
+float AV_Handler()
+{
+  // modified the function to only do actions related to the camera and return x y of the object
+  typeVector.clear();
+  xVector.clear();
+  yVector.clear();
+  float centerX;
+  float centerY;
+
+  AV_Camera.takeSnapshot(aivision::ALL_AIOBJS);
+
+  for (int object = 0; object < AV_Camera.objectCount; ++object)
+  {
+
+    aivision::object currentObject = AV_Camera.objects[object];
+
+    if (currentObject.id == redBlock)
+    {
+
+      typeVector.push_back(0);
+      xVector.push_back(currentObject.centerX);
+      yVector.push_back(currentObject.centerY);
+    }
+  }
+
+  if (typeVector.size() != 0)
+  {
+    std::cout << "Type: " << typeVector[0] << " X: " << xVector[0] << " Y: " << yVector[0] << std::endl;
+    centerX = xVector[0];
+    centerY = yVector[0];
+  }
+  else
+  {
+    std::cout << "--------------No Objects Found------------ " << std::endl;
+    centerX = 0;
+    centerY = 0;
+  }
+
+  return centerX, centerY;
+}
+
+void driveToGoal(float targetX, float targetY)
+{
+
+  float errorX;
+  float errorY;
+  float accuracyX = 3.0;
+  float accuracyY = 3.0;
+  float Kpx = 1.0;
+  float Kpy = 1.0;
+  float speed;
+  float turnSpeed;
+  while (true)
+  {
+    float x, y = AV_Handler();
+    if (x == 0.0 or y == 0.0)
+      break;
+    errorX = targetX - x;
+    errorY = targetY - y;
+    if (fabs(errorX) < accuracyX and fabs(errorY) < accuracyY)
+      break;
+    speed = Kpy * errorY;
+    if (speed > 100)
+      speed = 100;
+    if (speed < -100)
+      speed = -100;
+    turnSpeed = Kpx * errorX;
+    if (turnSpeed > 25)
+      turnSpeed = 25;
+    if (turnSpeed < -25)
+      turnSpeed = -25;
+    driveVolts(speed - turnSpeed, speed + turnSpeed, 10);
+  }
+  driveVolts(0, 0, 0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -81,7 +169,8 @@ void pre_auton(void) {
 
 void autonomous(void) {
   // ..........................................................................
-  // Insert autonomous user code here.
+  Brain.Screen.print("Autonomous Running");
+  driveToGoal(150,120);
   // ..........................................................................
 }
 
