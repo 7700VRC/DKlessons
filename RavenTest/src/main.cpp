@@ -75,19 +75,33 @@ float AV_Handler()
   float centerY;
 
   AV_Camera.takeSnapshot(aivision::ALL_AIOBJS);
-
+Brain.Screen.printAt(10, 20, "Objects Found: %d  ", AV_Camera.objectCount);
   for (int object = 0; object < AV_Camera.objectCount; ++object)
   {
 
     aivision::object currentObject = AV_Camera.objects[object];
-
+Brain.Screen.printAt(10, 50, "Object ID: %d", currentObject.id);
     if (currentObject.id == redBlock)
     {
 
       typeVector.push_back(0);
       xVector.push_back(currentObject.centerX);
       yVector.push_back(currentObject.centerY);
+      //Brain.Screen.printAt(10, 80, "Red Block Found at X: %f Y: %f", currentObject.centerX, currentObject.centerY);
+      Brain.Screen.setFillColor(red);
+      Brain.Screen.drawCircle(xVector[0], yVector[0], 5);
     }
+      else if (currentObject.id == blueBlock)
+      {
+  
+        typeVector.push_back(0);
+        xVector.push_back(currentObject.centerX);
+        yVector.push_back(currentObject.centerY);
+       // Brain.Screen.printAt(10, 110, "Blue Block Found at X: %f Y: %f", currentObject.centerX, currentObject.centerY);
+        Brain.Screen.setFillColor(blue);
+        Brain.Screen.drawCircle(xVector[0], yVector[0], 5);
+      }
+      Brain.Screen.setFillColor(transparent);
   }
 
   if (typeVector.size() != 0)
@@ -170,7 +184,11 @@ void pre_auton(void) {
 void autonomous(void) {
   // ..........................................................................
   Brain.Screen.print("Autonomous Running");
-  driveToGoal(150,120);
+  while(true){
+    AV_Handler();
+ // driveToGoal(150,120);
+  wait(10,msec);
+  }
   // ..........................................................................
 }
 
@@ -205,7 +223,7 @@ int main() {
 
   // Run the pre-autonomous function.
   pre_auton();
-
+autonomous();
   // Prevent main from exiting with an infinite loop.
   while (true) {
     wait(100, msec);
