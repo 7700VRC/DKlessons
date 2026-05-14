@@ -53,6 +53,16 @@ void driveVolts(int lspeed, int rspeed, int wt = WaitTime)
   wait(wt, msec);
 }
 
+void driveBrake(){
+  LF.stop(brake);  //set up for 2 motor drive
+  RF.stop(brake);
+}
+
+void driveCoast(){
+  LF.stop(coast);  //set up for 2 motor drive
+  RF.stop(coast);
+}
+
 // Health of the robot functions
 int YOFFSET = 20;
 int NewLineY = 20;
