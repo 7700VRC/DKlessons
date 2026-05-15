@@ -19,16 +19,20 @@ brain Brain;
 
 controller Controller1;
 
-motor RF = motor(PORT11, ratio18_1, true);
+motor RF = motor(PORT11, ratio6_1, false);
+motor RM = motor (PORT11, ratio6_1, false);
+motor RB = motor (PORT11, ratio6_1, false);
 
-motor LF = motor(PORT19, ratio18_1, false);
+motor LF = motor(PORT19, ratio6_1, true);
+motor LM = motor (PORT11, ratio6_1, true);
+motor LB = motor (PORT11, ratio6_1, true);
 
-inertial Gyro = inertial(PORT10);
+inertial Gyro1 = inertial(PORT10);
 
 // Global variables
-float D = 3.25;       // wheel diameter in inches
-float MotorGear = 36; // number of teeth on the gear driven by the motor
-float WheelGear = 60; // number of teeth on the gear that drives the wheel
+float D = 4.0;       // wheel diameter in inches
+float MotorGear = 48; // number of teeth on the gear driven by the motor
+float WheelGear = 84; // number of teeth on the gear that drives the wheel
 float G = MotorGear / WheelGear;
 float PI = 3.14;
 int WaitTime = 10; // sets frame rate for processing number is msec so 10 = 100fps, 20 = 50fps
@@ -62,6 +66,7 @@ void driveCoast(){
   LF.stop(coast);  //set up for 2 motor drive
   RF.stop(coast);
 }
+
 
 // Health of the robot functions
 int YOFFSET = 20;
@@ -157,9 +162,7 @@ void pre_auton(void)
 
 void autonomous(void)
 {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
+ inchDrive(36);
 }
 
 /*---------------------------------------------------------------------------*/
